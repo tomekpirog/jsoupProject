@@ -2,7 +2,6 @@ package pl.drit.learning;
 
 import java.util.List;
 
-//@Component
 class Websites {
 
 
@@ -13,6 +12,7 @@ class Websites {
             .productSelector("#search .product")
             .titleFunction((product) -> product.select(".product__name").attr("title"))
             .priceFunction((product) -> product.select("strong.price").text())
+            .linkFunction((product) -> product.select(".product__icon").attr("abs:href"))
             .nextPageFunction((page)-> page.select(".pagination__button").attr("abs:href"))
             .build();
     private static final String ALE_PLANSZOWKI_URL = "https://aleplanszowki.pl/search?controller=search&orderby=quantity&orderway=desc&search_query=";
@@ -22,6 +22,7 @@ class Websites {
             .productSelector("#center_column .product-container")
             .titleFunction((product) -> product.select(".product-name").attr("title"))
             .priceFunction((product) -> product.select(".price").text())
+            .linkFunction((product) -> product.select(".product-name").attr("abs:href"))
             .nextPageFunction((page)-> page.select("#pagination_next_bottom a").attr("abs:href"))
             .build();
     private static final String TROLLE_URL = "https://3trolle.pl/jolisearch?search_query=";
@@ -31,6 +32,7 @@ class Websites {
             .productSelector(".product-container")
             .titleFunction((product) -> product.select(".product-name").attr("title"))
             .priceFunction((product) -> product.select(".price_container .price").text())
+            .linkFunction((product) -> product.select(".product-name").attr("abs:href"))
             .nextPageFunction((page)-> page.select("#pagination_next_bottom a").attr("abs:href"))
             .build();
 

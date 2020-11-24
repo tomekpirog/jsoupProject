@@ -15,4 +15,5 @@ class ParsableSiteDTO {
     private final String productSelector;
     private final Function<Element,String> titleFunction;
     private final Function<Element,String> priceFunction;
+    private final Function<Element, String> linkFunction;
 }

@@ -24,9 +24,10 @@ class WebsiteParser {
         Document document = Jsoup.connect(pageURL).get();
         for (Element product : document.select(parsableSiteDTO.getProductSelector())) {
             String title = parsableSiteDTO.getTitleFunction().apply(product);
+            String link = parsableSiteDTO.getLinkFunction().apply(product);
             double price = PriceParser.parse(parsableSiteDTO.getPriceFunction().apply(product));
-            results.add(new SearchResultDTO(title, price));
-            System.out.println(title + " ---------- cena: " + price + " zł");
+            results.add(new SearchResultDTO(title, price, link));
+            System.out.println(title + " ---------- cena: " + price + " zł // LINK: " + link);
         }
 
         String nextPageURL = parsableSiteDTO.getNextPageFunction().apply(document);
