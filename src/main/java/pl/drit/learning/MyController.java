@@ -1,5 +1,6 @@
 package pl.drit.learning;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,9 @@ public class MyController {
         return "home page";
     }
 
+
     @Produces(MediaType.APPLICATION_JSON)
+    @CrossOrigin(origins = "http://127.0.0.1:50856")
     @GetMapping(value = "/boardgame/{title}")
     public List<SearchResultDTO> getBoardgameByName(@PathVariable("title") String title) throws IOException, ParseException {
         List<SearchResultDTO> result = new ArrayList<>();
