@@ -1,9 +1,11 @@
-package pl.drit.learning;
+package pl.drit.learning.parsers;
 
 import org.jsoup.Jsoup;
 import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import pl.drit.learning.dto.ParsableSiteDTO;
+import pl.drit.learning.dto.SearchResultDTO;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -12,9 +14,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-class WebsiteParser {
+public class WebsiteParser {
     private List<SearchResultDTO> results = new ArrayList<>();
-    List<SearchResultDTO> processWebsite(ParsableSiteDTO parsableSiteDTO, String title) throws IOException, ParseException {
+    public List<SearchResultDTO> processWebsite(ParsableSiteDTO parsableSiteDTO, String title) throws IOException, ParseException {
         System.out.println("-----------------------------------------------------");
         System.out.println("Witryna: " + parsableSiteDTO.getSiteName());
         return processWebsitePage(parsableSiteDTO, parsableSiteDTO.getFirstSiteURL() + URLEncoder.encode(title, StandardCharsets.UTF_8));

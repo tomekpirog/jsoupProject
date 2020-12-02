@@ -1,5 +1,7 @@
 package pl.drit.learning;
 
+import pl.drit.learning.dto.ParsableSiteDTO;
+
 import java.util.List;
 
 class Websites {

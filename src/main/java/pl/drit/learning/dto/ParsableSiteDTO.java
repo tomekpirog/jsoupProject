@@ -1,4 +1,4 @@
-package pl.drit.learning;
+package pl.drit.learning.dto;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.util.function.Function;
 
 @Builder
 @Getter
-class ParsableSiteDTO {
+public class ParsableSiteDTO {
     private final String siteName;
     private final String firstSiteURL;
     private final Function<Element, String> nextPageFunction;

@@ -1,12 +1,12 @@
-package pl.drit.learning;
+package pl.drit.learning.parsers;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
-class PriceParser {
-    static double parse(final String amount) throws ParseException {
+public class PriceParser {
+    public static double parse(final String amount) throws ParseException {
         return parse(amount, Locale.forLanguageTag("pl-PL"));
     }
     private static double parse(final String amount, final Locale locale) throws ParseException {
