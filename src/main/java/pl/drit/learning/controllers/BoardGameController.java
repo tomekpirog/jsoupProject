@@ -2,35 +2,38 @@ package pl.drit.learning.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.drit.learning.entity.BoardGameDetails;
 import pl.drit.learning.exceptions.ResourceNotFoundException;
 import pl.drit.learning.repository.BoardGameRepository;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class BoardGameController {
 
     @Autowired
     private BoardGameRepository boardGameRepository;
 
+    @GetMapping("/boardgames")
     public List<BoardGameDetails> getAllBoardgames() {
         return boardGameRepository.findAll();
     }
 
-    public ResponseEntity<BoardGameDetails> getBoardGameById(Long boardGameId) throws ResourceNotFoundException {
+    @GetMapping("/boardgames/{id}")
+    public ResponseEntity<BoardGameDetails> getBoardGameById(
+            @PathVariable(value = "id") Long boardGameId) throws ResourceNotFoundException {
         BoardGameDetails boardGameDetails = boardGameRepository.findById(boardGameId)
                 .orElseThrow(() -> new ResourceNotFoundException("BoardGame not found on :: "+ boardGameId));
         return ResponseEntity.ok().body(boardGameDetails);
     }
 
-    public ResponseEntity<BoardGameDetails> updateBoardGame(Long boardGameId, @RequestBody BoardGameDetails boardGameDetails) throws ResourceNotFoundException {
+    @PutMapping("/boardgames/{id}")
+    public ResponseEntity<BoardGameDetails> updateBoardGame(@PathVariable(value = "id") Long boardGameId, @Valid @RequestBody BoardGameDetails boardGameDetails) throws ResourceNotFoundException {
         BoardGameDetails boardGameDetail = boardGameRepository.findById(boardGameId)
                 .orElseThrow(() -> new ResourceNotFoundException("BoardGame not found on :: "+ boardGameId));
 
@@ -41,7 +44,9 @@ public class BoardGameController {
         return ResponseEntity.ok(updatedBoardGame);
     }
 
-    public Map<String, Boolean> deleteUser(Long boardGameId) throws Exception {
+    @DeleteMapping("/boardgames/{id}")
+    public Map<String, Boolean> deleteBoardGame(
+            @PathVariable(value = "id") Long boardGameId) throws Exception {
         BoardGameDetails boardGameDetails = boardGameRepository.findById(boardGameId)
                 .orElseThrow(() -> new ResourceNotFoundException("BoardGame not found on :: "+ boardGameId));
 
