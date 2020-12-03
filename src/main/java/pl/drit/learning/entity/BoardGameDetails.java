@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "boardgames")
@@ -19,6 +20,7 @@ public class BoardGameDetails {
     private String link;
 
     @Id
+    @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long getId() {
         return id;
@@ -34,7 +36,8 @@ public class BoardGameDetails {
         return price;
     }
 
-    @Column(name = "link")
+
+    @Column(name = "link", unique = true)
     public String getLink() {
         return link;
     }

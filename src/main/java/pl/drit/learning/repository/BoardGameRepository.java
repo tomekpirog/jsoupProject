@@ -6,5 +6,5 @@ import pl.drit.learning.entity.BoardGameDetails;
 
 @Repository
 public interface BoardGameRepository extends JpaRepository<BoardGameDetails, Long> {
-
+    BoardGameDetails findByLink(String boardGameLink);
 }

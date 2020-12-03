@@ -50,6 +50,9 @@ public class MyController {
         boardGameDetails.setLink(searchResultDTO.getLink());
         boardGameDetails.setPrice(searchResultDTO.getPrice());
 
-        boardGameRepository.save(boardGameDetails);
+        if (boardGameRepository.findByLink(searchResultDTO.getLink()) == null) {
+            boardGameRepository.save(boardGameDetails);
+        }
+
     }
 }
