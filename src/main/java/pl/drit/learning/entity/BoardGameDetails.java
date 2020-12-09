@@ -1,44 +1,31 @@
 package pl.drit.learning.entity;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import pl.drit.learning.LinkAddress;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "boardgames")
 @EntityListeners(AuditingEntityListener.class)
 @Setter
+@Getter
 @NoArgsConstructor
 public class BoardGameDetails {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="identifier", unique = true, nullable = false)
     private long id;
+    @Column(name = "title")
     private String title;
+    @Column(name = "price")
     private double price;
+    @LinkAddress
+    @Column(name = "link", unique = true)
     private String link;
 
-    @Id
-    @NotNull
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public long getId() {
-        return id;
-    }
-
-    @Column(name = "title")
-    public String getTitle() {
-        return title;
-    }
-
-    @Column(name = "price")
-    public double getPrice() {
-        return price;
-    }
-
-
-    @Column(name = "link", unique = true)
-    public String getLink() {
-        return link;
-    }
 }

@@ -32,15 +32,15 @@ public class BoardGameController {
         return ResponseEntity.ok().body(boardGameDetails);
     }
 
-    @PutMapping("/boardgames/{id}")
+    @PatchMapping("/boardgames/{id}")
     public ResponseEntity<BoardGameDetails> updateBoardGame(@PathVariable(value = "id") Long boardGameId, @Valid @RequestBody BoardGameDetails boardGameDetails) throws ResourceNotFoundException {
-        BoardGameDetails boardGameDetail = boardGameRepository.findById(boardGameId)
+        BoardGameDetails found = boardGameRepository.findById(boardGameId)
                 .orElseThrow(() -> new ResourceNotFoundException("BoardGame not found on :: "+ boardGameId));
 
-        boardGameDetail.setTitle(boardGameDetail.getTitle());
-        boardGameDetail.setLink(boardGameDetail.getLink());
-        boardGameDetail.setPrice(boardGameDetail.getPrice());
-        final BoardGameDetails updatedBoardGame = boardGameRepository.save(boardGameDetails);
+        found.setTitle(boardGameDetails.getTitle());
+        found.setLink(boardGameDetails.getLink());
+        found.setPrice(boardGameDetails.getPrice());
+        final BoardGameDetails updatedBoardGame = boardGameRepository.save(found);
         return ResponseEntity.ok(updatedBoardGame);
     }
 
