@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.drit.learning.entity.BoardGameDetails;
+import pl.drit.learning.entity.BoardGameDetailsList;
 import pl.drit.learning.exceptions.ResourceNotFoundException;
 import pl.drit.learning.repository.BoardGameRepository;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,9 +21,17 @@ public class BoardGameController {
     @Autowired
     private BoardGameRepository boardGameRepository;
 
-    @GetMapping("/boardgames")
-    public List<BoardGameDetails> getAllBoardgames() {
-        return boardGameRepository.findAll();
+    /*@GetMapping("/boardgames")
+    public BoardGameDetails[] getAllBoardgames() {
+        BoardGameDetails[] array = new BoardGameDetails[]{};
+        return boardGameRepository.findAll().toArray(array);
+    }*/
+
+    @GetMapping(value = "/boardgames", produces = "application/json")
+    public BoardGameDetailsList getBoardgamesUsingWrapperClass()
+    {
+        List<BoardGameDetails> boardGameDetailsList = boardGameRepository.findAll();
+        return new BoardGameDetailsList(boardGameDetailsList);
     }
 
     @GetMapping("/boardgames/{id}")

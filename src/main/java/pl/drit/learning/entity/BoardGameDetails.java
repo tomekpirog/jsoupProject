@@ -18,7 +18,6 @@ public class BoardGameDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="identifier", unique = true, nullable = false)
     private long id;
     @Column(name = "title")
     private String title;
