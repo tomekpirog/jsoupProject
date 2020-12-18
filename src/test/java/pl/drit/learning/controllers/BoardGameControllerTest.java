@@ -1,12 +1,15 @@
 package pl.drit.learning.controllers;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -15,11 +18,13 @@ import pl.drit.learning.Main;
 import pl.drit.learning.entity.BoardGameDetails;
 import pl.drit.learning.entity.BoardGameDetailsList;
 
+import javax.sql.DataSource;
 import javax.ws.rs.core.Application;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ActiveProfiles({"dev"})
 @ContextConfiguration(classes = Main.class)
@@ -36,53 +41,44 @@ class BoardGameControllerTest {
         return "http://localhost:" + port;
     }
 
-    @Test
-    public void contextLoads() {
-
+    @BeforeEach
+    void setup(@Autowired DataSource dataSource) {
+        try (Connection conn = dataSource.getConnection()) {
+            ScriptUtils.executeSqlScript(conn, new ClassPathResource("before.sql"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    @Sql(scripts = "classpath:before.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @Test
     public void testGetAllBoardgames() {
         BoardGameDetailsList response = restTemplate.getForObject(getRootUrl() + "/boardgames", BoardGameDetailsList.class);
         List<BoardGameDetails> boardGameDetailsList = response.getBoardGameDetailsList();
         for (BoardGameDetails boardgameDetails : boardGameDetailsList) {
-            System.out.println(boardgameDetails);
+            System.out.println(boardgameDetails.getId() + " - " + boardgameDetails.getTitle());
         }
-        /*ResponseEntity<String> result = restTemplate.getForEntity(getRootUrl() + "/boardgames", String.class);
-
-        Assert.assertEquals(200, result.getStatusCodeValue());
-        assertTrue(result.getBody().contains("boardgames"));*/
-
+        assertEquals(4, boardGameDetailsList.size());
     }
 
     @Test
     public void testGetBoardgameById() {
         BoardGameDetails boardGameDetails = restTemplate.getForObject(getRootUrl() + "/boardgames/1", BoardGameDetails.class);
         System.out.println(boardGameDetails.getTitle());
-        assertNotNull(boardGameDetails);
-    }
-
-    @Test
-    public void testCreateBoardgame() {
-        BoardGameDetails boardGameDetails = new BoardGameDetails();
-        boardGameDetails.setTitle("Catan");
-        boardGameDetails.setPrice(100L);
-        boardGameDetails.setLink("https://www.aleplanszowki.pl");
-        ResponseEntity<BoardGameDetails> postResponse = restTemplate.postForEntity(getRootUrl() + "/boardgames", boardGameDetails, BoardGameDetails.class);
-        assertNotNull(postResponse);
-        assertNotNull(postResponse.getBody());
+        assertEquals("Catan", boardGameDetails.getTitle());
+        assertEquals("www.gryplanszowe.pl", boardGameDetails.getLink());
+        assertEquals(99.00, boardGameDetails.getPrice());
     }
 
     @Test
     public void testUpdateBoardgame() {
         int id = 1;
         BoardGameDetails boardGameDetails = restTemplate.getForObject(getRootUrl() + "/boardgames/" + id, BoardGameDetails.class);
-        boardGameDetails.setTitle("Dixit");
-        boardGameDetails.setPrice(120L);
-        restTemplate.put(getRootUrl() + "/boardgames/" + id, boardGameDetails);
-        BoardGameDetails updatedEmployee = restTemplate.getForObject(getRootUrl() + "/boardgames/" + id, BoardGameDetails.class);
-        assertNotNull(updatedEmployee);
+        BoardGameDetails updatedBoardgame = restTemplate.getForObject(getRootUrl() + "/boardgames/" + id, BoardGameDetails.class);
+        updatedBoardgame.setTitle("Zmieniony tytuł");
+        updatedBoardgame.setPrice(120L);
+        restTemplate.put(getRootUrl() + "/boardgames/" + id, updatedBoardgame);
+        assertEquals("Zmieniony tytuł", updatedBoardgame.getTitle());
+        assertNotEquals(boardGameDetails.getTitle(), updatedBoardgame.getTitle());
     }
 
     @Test

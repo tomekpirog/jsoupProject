@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
 public class BoardGameController {
 
     @Autowired
@@ -31,6 +30,7 @@ public class BoardGameController {
     public BoardGameDetailsList getBoardgamesUsingWrapperClass()
     {
         List<BoardGameDetails> boardGameDetailsList = boardGameRepository.findAll();
+        System.out.println();
         return new BoardGameDetailsList(boardGameDetailsList);
     }
 

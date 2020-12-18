@@ -6,8 +6,8 @@ CREATE TABLE boardgames (
   link VARCHAR(250) NOT NULL,
   price DOUBLE DEFAULT NULL
 );*/
-
-INSERT INTO boardgames VALUES (1, 'Catan', 'www.gryplanszowe.pl', DOUBLE(99.00));
-INSERT INTO boardgames VALUES (2, 'Dixit', 'www.aleplanszowki.pl', DOUBLE(15));
-INSERT INTO boardgames VALUES (3, 'Bierki', 'www.alto.pl', DOUBLE(44));
-INSERT INTO boardgames VALUES (4, 'Ligretto', 'www.3trolle.pl', DOUBLE(35));
+DELETE FROM boardgames;
+INSERT INTO boardgames (id, title, link, price) VALUES (1, 'Catan', 'www.gryplanszowe.pl', 99.00);
+INSERT INTO boardgames (id, title, link, price) VALUES (2, 'Dixit', 'www.aleplanszowki.pl', 15.00);
+INSERT INTO boardgames (id, title, link, price) VALUES (3, 'Bierki', 'www.alto.pl', 44.00);
+INSERT INTO boardgames (id, title, link, price) VALUES (4, 'Ligretto', 'www.3trolle.pl', 35.00);
